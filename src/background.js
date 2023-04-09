@@ -1,37 +1,12 @@
 /* global chrome */
-
-const initializeContextMenus = async (isAppEnabled) => {
-  await removeAllContextMenus();
-  await addContextMenus([
-    {
-      title: "Switch ON",
-      id: "ON",
-      visible: !isAppEnabled,
-      enabled: !isAppEnabled,
-    },
-    {
-      title: "Switch OFF",
-      id: "OFF",
-      visible: isAppEnabled,
-      enabled: isAppEnabled,
-    },
-  ]);
-
-  chrome.contextMenus.onClicked.addListener((info) => {
-    switch (info.menuItemId) {
-      case "OFF":
-        stopApp();
-        break;
-      case "ON":
-        startApp();
-        break;
-      default:
-        break;
-    }
-  });
-
-  console.log("Context Menus created successfully");
-};
+import {
+  updateBadgeText,
+  removeAllContextMenus,
+  addContextMenus,
+  updateContextMenu,
+  setValueInChromeStorage,
+  getValueFromChromeStorage,
+} from "./service/Extension";
 
 const toggleAppState = async (oldState) => {
   // fetch the current app state if it isn't passed
@@ -73,6 +48,39 @@ const stopApp = async () => {
   console.log("App stopped successfully");
 };
 
+const initializeContextMenus = async (isAppEnabled) => {
+  await removeAllContextMenus();
+  await addContextMenus([
+    {
+      title: "Switch ON",
+      id: "ON",
+      visible: !isAppEnabled,
+      enabled: !isAppEnabled,
+    },
+    {
+      title: "Switch OFF",
+      id: "OFF",
+      visible: isAppEnabled,
+      enabled: isAppEnabled,
+    },
+  ]);
+
+  chrome.contextMenus.onClicked.addListener((info) => {
+    switch (info.menuItemId) {
+      case "OFF":
+        stopApp();
+        break;
+      case "ON":
+        startApp();
+        break;
+      default:
+        break;
+    }
+  });
+
+  console.log("Context Menus created successfully");
+};
+
 const initializeApp = async () => {
   console.log("Starting background service...");
 
@@ -95,7 +103,7 @@ const initializeApp = async () => {
   }
 
   // otherwise
-  await _startApp();
+  await startApp();
 };
 
 initializeApp();

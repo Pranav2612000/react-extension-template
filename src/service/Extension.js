@@ -98,13 +98,10 @@ export function connectPopoverWithBackground({ channel, onMessage }) {
 
 export async function sendMessageToBackground(message) {
   return new Promise((resolve) => {
-    chrome.runtime.sendMessage(
-      message,
-      (response) => {
-        console.log("Response from text update", response);
-        resolve(response);
-      }
-    );
+    chrome.runtime.sendMessage(message, (response) => {
+      console.log("Response from text update", response);
+      resolve(response);
+    });
   });
 }
 
